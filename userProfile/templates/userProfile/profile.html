@@ -1,0 +1,37 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Profile
+{% endblock %}
+
+{% block content %}
+    <h1>Profile</h1>
+
+    <p> Your bids</p>
+    <p>Your Auctions</p>
+    <p>Your wins</p>
+
+    <form class="delete-account" id="delete-account" action="" method="post">
+        {% csrf_token %}
+        <button onclick="confirmationFunction()">Delete Account</button>
+    </form>
+
+    {% if errorFlag %}
+        <div class="errorMessage">
+            {{ error }}
+        </div>
+    {% endif %}
+
+
+    <script>
+
+
+        function confirmationFunction(){
+            if(!confirm("Are you sure you want to delete your account?")){
+                event.preventDefault()
+            }
+
+
+        }
+    </script>
+{% endblock %}

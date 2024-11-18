@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Register Now!
+{% endblock %}
+
+{% block content %}
+    <h1>Register Now!</h1>
+
+    <form class="register-form" action="" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <button>Submit</button>
+    </form>
+{% endblock %}

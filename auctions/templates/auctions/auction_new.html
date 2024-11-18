@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    New Auction
+{% endblock %}
+
+{% block content %}
+    <section>
+        <h1>New Auction</h1>
+        <form class="validation_form" action="{% url 'auctions:newAuction' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form }}
+            <button class="form-submit">Create Auction</button>
+        </form>
+    </section>
+
+{% endblock %}

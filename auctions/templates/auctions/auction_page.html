@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    {{ auction.title }}
+{% endblock %}
+
+{% block content %}
+    <section>
+        <img class="picture" src="{{ auction.picture.url }}" alt=" {{ auction.name }}"/>
+        <h1>{{ auction.name }}</h1>
+            <p>{{ auction.created_at }}</p>
+            <p>{{ auction.description }}</p>
+            <p id="highestBidder">{{ auction.highestBidder }}</p>
+            <p id="current_bid">$ {{ auction.current_bid|floatformat:"2" }}</p>
+            <p>{{ auction.expires_at }}</p>
+
+        <form class="bidding_form" action="{% url 'auctions:page' itemId=auction.itemId %}" method="post">
+            {% csrf_token %}
+            <label for="bid">Enter your bid:
+                <input name="bid" required>
+            </label>
+
+            <button class="form-submit">Bid</button>
+        </form>
+
+        {% if errorFlag %}
+            <div class="errorMessage">
+                {{ error }}
+            </div>
+        {% endif %}
+    </section>
+
+
+{% endblock %}
