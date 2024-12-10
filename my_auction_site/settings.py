@@ -35,7 +35,8 @@ INSTALLED_APPS = [
     'auctions',
     'authentication',
     'home',
-    'userProfile'
+    'userProfile',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -66,7 +67,18 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'my_auction_site.wsgi.application'
+ASGI_APPLICATION = 'my_auction_site.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('40.82.180.123', 6379)],
+        }
+    }
+}
+
+#WSGI_APPLICATION = 'my_auction_site.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -101,7 +113,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'EST'
 
 USE_I18N = True
 

@@ -8,4 +8,8 @@ urlpatterns = [
     path('<uuid:itemId>', views.auction_page, name='page'),
 
     path('new-auction/', views.auction_new, name='newAuction'),
+
+    path('<uuid:itemId>/check', views.checkAuction, name='checkAuction'),
+    path('<uuid:itemId>/time', views.calculateCountdown, name='countdown'),
+    path('<uuid:itemId>/status', views.setStatus, name='status'),
 ]

@@ -13,14 +13,16 @@ from django.contrib.auth.models import User
 class AuctionItem(models.Model):
     itemId = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name='auctionItems')
-    highestBidder = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='highestBidder')
+    highestBidder = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True,
+                                      related_name='highestBidder')
 
     name = models.CharField(max_length=100)
     description = models.TextField()
     picture = models.ImageField(upload_to='media')
-    starting_bid = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal('0.00') )
+    starting_bid = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal('0.00'))
     current_bid = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal('0.00'))
     time_limit = models.IntegerField(default=5, validators=[MinValueValidator(1), MaxValueValidator(5)])
+    time_left = models.DateTimeField(default=timezone.now)
 
     created_at = models.DateTimeField(auto_now_add=True)
     expires_at = models.DateTimeField(default=timezone.now)
@@ -29,5 +31,10 @@ class AuctionItem(models.Model):
     def __str__(self):
         return self.name
 
+class Notifications(models.Model):
+    notificationMessage = models.TextField()
+    winnerNotif = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
 
-
+    def __str__(self):
+        return self.notificationMessage

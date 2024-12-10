@@ -1,18 +1,23 @@
 {% extends 'layout.html' %}
+{% load static %}
 
 {% block title %}
-    {{ auction.title }}
+    {{ auction.name }}
 {% endblock %}
+
 
 {% block content %}
     <section>
         <img class="picture" src="{{ auction.picture.url }}" alt=" {{ auction.name }}"/>
         <h1>{{ auction.name }}</h1>
-            <p>{{ auction.created_at }}</p>
+            <p id="created">{{ auction.created_at }}</p>
+            <p id="expiry">{{ auction.expires_at }}</p>
             <p>{{ auction.description }}</p>
             <p id="highestBidder">{{ auction.highestBidder }}</p>
             <p id="current_bid">$ {{ auction.current_bid|floatformat:"2" }}</p>
-            <p>{{ auction.expires_at }}</p>
+            <p id="timer"></p>
+
+
 
         <form class="bidding_form" action="{% url 'auctions:page' itemId=auction.itemId %}" method="post">
             {% csrf_token %}
@@ -30,5 +35,67 @@
         {% endif %}
     </section>
 
+
+     <script>
+
+        if({{ auction.active|yesno:"true,false" }} === true)
+        {
+
+            const bidder = document.getElementById('highestBidder');
+            const countdown = document.getElementById('timer');
+            let timeLeft = 0
+
+            // Update countdown every second
+            const myinterval = setInterval(() => {
+
+                // Calculate remaining time in milliseconds
+                fetch("{% url 'auctions:countdown' itemId=auction.itemId  %}", {method: 'GET'})
+                    .then(response => response.json())
+                    .then(data =>
+                    {
+                        let minutes = data.timeM;
+                        let seconds = data.timeS;
+
+                        if (minutes <= 0 && seconds <= 0) {
+                            // Stop the countdown when time is up
+                            fetch("{% url 'auctions:checkAuction' itemId=auction.itemId %}",{method: 'GET'})
+                                .then(response => response.json())
+                                .then(data => {
+                                if (data.restart === "true")
+                                {
+                                    console.log("Restarting auction due to no bids")
+                                    timeLeft = data.time
+                                }
+                                else if (data.restart === "false")
+                                {
+                                    console.log("Auction closed")
+                                    clearInterval(myinterval)
+                                    countdown.innerHTML = "{{ auction.highestBidder }} has won the auction!"
+                                    fetch("{% url 'auctions:status' itemId=auction.itemId %}", {method:'GET'})
+                                        .then(() => {
+                                            console.log("Set auction status to inactive")
+                                        })
+
+                                }
+                            })
+
+
+                        }
+                        else
+                        {
+                            countdown.innerHTML = minutes + 'm' + seconds + 's';
+                            bidder.innerHTML = "{{ auction.highestBidder }}";
+                        }
+                    })
+            }, 1000);
+        }
+        else
+        {
+            const countdown = document.getElementById('timer');
+            countdown.innerHTML = "{{ auction.highestBidder }} has won the auction!"
+        }
+
+
+     </script>
 
 {% endblock %}
