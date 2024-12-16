@@ -1,30 +1,100 @@
 {% extends 'layout.html' %}
 
-{% block title %}
-    Profile
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/profilePage.css' %}">
 {% endblock %}
 
-{% block content %}
-    <h1>Profile</h1>
 
-    <p> Your bids</p>
-    <p>Your Auctions</p>
-    <p>Your wins</p>
+{% block content %}
+    <h1>Hi {{ user }}</h1>
+
+     <h2> Auctions you are winning</h2>
+
+    {% if bids %}
+        <div class="auction-container">
+            {% for bid in bids %}
+
+                <div class="auction">
+                    <a href="{% url 'auctions:page' itemId=bid.itemId %}">
+                    <h3>
+                        {{ bid.name }}
+                    </h3>
+                    <img src="{{ bid.picture.url }}" alt="{{ bid.name }}">
+                    <h3> Your bid: {{ bid.current_bid }}</h3>
+                    <h3 id="auctionIDBids">Auction ID: {{ bid.itemId }}</h3>
+                    </a>
+                    <button onclick="dataRefreshBids()">Click to refresh auction status</button>
+                </div>
+
+
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>You do not have the highest bid on any live auctions</p>
+    {% endif %}
+
+    <h2 id="title">Your live auctions you have created</h2>
+     {% if auctions %}
+        <div class="auction-container">
+            {% for auction in auctions %}
+
+                <div class="auction">
+                    <a href="{% url 'auctions:page' itemId=auction.itemId %}">
+                    <h3>
+                        {{ auction.name }}
+                    </h3>
+                    <img src="{{ auction.picture.url }}" alt="{{ auction.name }}">
+                    <h3 id="highestBidderA"> Current highest bidder: {{ auction.highestBidder }}</h3>
+                    <h3> Current bid: {{ auction.current_bid }}</h3>
+                    <h3 id="auctionIDAuctions">Auction ID: {{ auction.itemId }}</h3>
+                    </a>
+                    <button onclick="dataRefreshAuctions()">Click to refresh auction status</button>
+                </div>
+
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>You do not have any active auctions</p>
+    {% endif %}
+
+    <h2>Auctions you have won</h2>
+     {% if auctionsWon %}
+        <div class="auction-container">
+            {% for win in auctionsWon %}
+                <a href="{% url 'auctions:page' itemId=win.itemId %}">
+                <div class="auction">
+                    <h3>
+                        {{ win.name }}
+                    </h3>
+                    <img src="{{ win.picture.url }}" alt="{{ win.name }}">
+                    <h3> Your bid: {{ win.current_bid }}</h3>
+                </div>
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>You have not won any auctions</p>
+    {% endif %}
+
+
 
     <form class="delete-account" id="delete-account" action="" method="post">
         {% csrf_token %}
         <button onclick="confirmationFunction()">Delete Account</button>
     </form>
 
-    {% if errorFlag %}
-        <div class="errorMessage">
-            {{ error }}
-        </div>
-    {% endif %}
+
 
 
     <script>
 
+        {% if errorFlag %}
+            window.onload = function () {
+                alert("{{ error }}")
+            }
+        {% endif %}
 
         function confirmationFunction(){
             if(!confirm("Are you sure you want to delete your account?")){
@@ -33,5 +103,44 @@
 
 
         }
+
+
+        async function dataRefreshBids() {
+            const temp = document.getElementById('auctionIDBids').innerText
+            const itemId = temp.split(" ")[2];
+            console.log(itemId)
+            const url = `/profile/${itemId}`
+            console.log(url)
+
+            try{
+                await fetch(url,{method: 'GET'})
+                location.reload();
+            }
+            catch (e) {
+                console.log("Nothing has changed with auction")
+            }
+
+
+        }
+
+        async function dataRefreshAuctions() {
+            const temp = document.getElementById('auctionIDAuctions').innerText
+            const itemId = temp.split(" ")[2];
+            console.log(itemId)
+            const url = `/profile/${itemId}`
+            console.log(url)
+
+            try{
+                await fetch(url,{method: 'GET'})
+                location.reload();
+            }
+            catch (e) {
+                console.log("Nothing has changed with auction")
+            }
+
+        }
+
+
+
     </script>
 {% endblock %}

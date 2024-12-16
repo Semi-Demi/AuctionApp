@@ -1,0 +1,44 @@
+.auction-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columns */
+    gap: 20px; /* Space between auction boxes */
+    padding: 20px;
+}
+
+.auction {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.auction:hover {
+    transform: scale(1.02); /* Slightly enlarge on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.auction h2 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.auction p {
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+img {
+    max-width: 75%;
+    max-height: 25vh;
+    align-content: center;
+    object-fit: contain;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}

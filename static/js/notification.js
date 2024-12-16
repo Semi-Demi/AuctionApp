@@ -1,27 +1,23 @@
-console.log("Helo")
+console.log("Hello")
 
-if (!sessionStorage.getItem('siteConnection'))
-{
-    const socket = new WebSocket('ws://' + window.location.host + '/ws/auctions/');
 
-    sessionStorage.setItem('siteConnection', socket);
-    console.log("First connect")
+    const mySocket = new WebSocket('ws://' + window.location.host + '/ws/auctions/');
 
-}
-else
-{
-    const socket = sessionStorage.getItem('siteConnection')
-    console.log("Repeating connect")
-}
+    mySocket.onmessage = function (e) {
+        const data = JSON.parse(e.data)
+        console.log(data)
+        window.alert(data.message_sent)
+    };
 
-console.log(socket)
+    mySocket.onclose = function (e) {
+        console.error("Closed unexpectedly")
+    };
 
-socket.onmessage = function (e) {
-    console.log('data: ' + e.data);
-    const data = JSON.parse(e.data)
-    const price = data.bidPrice;
-    const time = data.timeLeft;
 
-    console.log(price);
-    console.log(time);
-};
+    document.querySelector('#form-submit').onclick = function (e) {
+        const user = "test"
+        const message = user.value + " clicked button";
+        mySocket.send(JSON.stringify({
+            'message': message
+        }));
+    };

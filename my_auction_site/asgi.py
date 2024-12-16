@@ -14,6 +14,7 @@ from channels.routing import ProtocolTypeRouter, URLRouter
 from django.core.asgi import get_asgi_application
 import auctions.routing
 
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'my_auction_site.settings')
 
 

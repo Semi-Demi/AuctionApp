@@ -1,0 +1,48 @@
+
+.form-container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+    box-sizing: border-box;
+}
+
+
+form .form-submit {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #545462;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+form .form-submit:hover {
+    transform: scale(1.02); /* Slightly enlarge on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Ensure form fields inside your {{ form }} render nicely */
+.validation_form input,
+.validation_form select,
+.validation_form textarea {
+    width: 95%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+
+section h1 {
+    text-align: center;
+    color: #a00000;
+}

@@ -1,17 +1,24 @@
 {% extends 'layout.html' %}
+{% load static %}
 
 {% block title %}
     New Auction
 {% endblock %}
 
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/auctionNew.css' %}">
+{% endblock css %}
+
 {% block content %}
     <section>
         <h1>New Auction</h1>
-        <form class="validation_form" action="{% url 'auctions:newAuction' %}" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form }}
-            <button class="form-submit">Create Auction</button>
-        </form>
+        <div class="form-container">
+            <form class="validation_form" action="{% url 'auctions:newAuction' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form }}
+                <button class="form-submit">Create Auction</button>
+            </form>
+        </div>
     </section>
 
 {% endblock %}

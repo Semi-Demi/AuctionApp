@@ -2,19 +2,26 @@
 {% load static %}
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+    {% block meta %}
+    {% endblock meta %}
+
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    {% block css %}
+    {% endblock css %}
     <title>
         {% block title %}
             Django App
         {% endblock %}
     </title>
 
-
-
     <script src="{% static 'js/notification.js' %}"></script>
+
+
 
 
 
@@ -22,20 +29,21 @@
 <body>
     <nav>
         {% if user.is_authenticated %}
-            <a href="/home">Home</a>
-            <a href="/profile">Profile</a>
-            <a href="{% url 'auctions:list' %}">Auctions</a>
-            <a href="{% url 'auctions:newAuction' %}">Create an Auction</a>
+            <a id=nav-button href="/profile">Profile</a>
+            <a id=nav-button href="{% url 'auctions:list' %}">Auctions</a>
+            <a id=nav-button href="{% url 'auctions:newAuction' %}">Create an Auction</a>
             <form class="logout" action="{% url 'authentication:logout' %}" method="post">
                 {% csrf_token %}
                 <button class="logout-button">Logout</button>
             </form>
         {% else %}
-            <a href="{% url 'authentication:register' %}">Sign Up</a>
-            <a href="{% url 'authentication:login' %}">Sign In</a>
+            <a id="signup" href="{% url 'authentication:register' %}">Sign Up</a>
+            <a id="signin" href="{% url 'authentication:login' %}">Sign In</a>
         {% endif %}
     </nav>
-    <main >
+
+    <main>
+
         {% block content %}
         <h1>test</h1>
         {% endblock %}

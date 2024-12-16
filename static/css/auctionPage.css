@@ -1,12 +1,73 @@
-html, body {
-  height: 100%;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+
+section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 500px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
-img {
-  max-width: 100%;
-  max-height: 100%;
+h1 {
+    font-size: 2em;
+    margin: 20px 0;
+    color: #1f1f1f;
+}
+
+img.picture {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+#highestBidder,
+#current_bid {
+    font-size: 1.2em;
+    margin: 10px 0;
+}
+
+#timer {
+    font-size: 1.5em;
+    color: #545462;
+    font-weight: bold;
+}
+
+.bidding_form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 500px;
+    margin-top: 30px;
+}
+
+.bidding_form label {
+    font-size: 1.1em;
+    margin-bottom: 5px;
+}
+
+.bidding_form input {
+    padding: 5px;
+    font-size: 1em;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.bidding_form button {
+    padding: 12px;
+    font-size: 1.1em;
+    background-color: #545462;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.bidding_form button:hover {
+    background-color: #45a049;
 }

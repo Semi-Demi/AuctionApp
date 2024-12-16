@@ -7,9 +7,11 @@
 {% block content %}
     <h1>Register Now!</h1>
 
-    <form class="register-form" action="" method="post">
-        {% csrf_token %}
-        {{ form }}
-        <button>Submit</button>
-    </form>
+    <div class="login">
+        <form class="register-form" action="" method="post">
+            {% csrf_token %}
+            {{ form }}
+            <button>Submit</button>
+        </form>
+    </div>
 {% endblock %}

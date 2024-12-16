@@ -5,43 +5,50 @@
     {{ auction.name }}
 {% endblock %}
 
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/auctionPage.css' %}">
+{% endblock %}
+
 
 {% block content %}
     <section>
-        <img class="picture" src="{{ auction.picture.url }}" alt=" {{ auction.name }}"/>
-        <h1>{{ auction.name }}</h1>
-            <p id="created">{{ auction.created_at }}</p>
-            <p id="expiry">{{ auction.expires_at }}</p>
-            <p>{{ auction.description }}</p>
-            <p id="highestBidder">{{ auction.highestBidder }}</p>
-            <p id="current_bid">$ {{ auction.current_bid|floatformat:"2" }}</p>
-            <p id="timer"></p>
+    <div class="auction-details">
+        <img class="picture" src="{{ auction.picture.url }}" alt="{{ auction.name }}"/>
+        <h1>Item: {{ auction.name }}</h1>
+            <p>Item Description: {{ auction.description }}</p>
+            <p id="highestBidder">Highest Bidder: {{ auction.highestBidder }}</p>
+            <p id="current_bid">Bid: ${{ auction.current_bid|floatformat:"2" }}</p>
+            <p id="timer">Time:</p>
+    </div>
 
+        {% if auction.active %}
+        <div class="bidding-area">
+            <form class="bidding_form" action="{% url 'auctions:page' itemId=auction.itemId %}" method="post">
+                {% csrf_token %}
+                <label for="bid">Enter your bid:
+                    <input name="bid" required>
+                </label>
 
-
-        <form class="bidding_form" action="{% url 'auctions:page' itemId=auction.itemId %}" method="post">
-            {% csrf_token %}
-            <label for="bid">Enter your bid:
-                <input name="bid" required>
-            </label>
-
-            <button class="form-submit">Bid</button>
-        </form>
-
-        {% if errorFlag %}
-            <div class="errorMessage">
-                {{ error }}
-            </div>
+                <button class="form-submit">Bid</button>
+            </form>
+        </div>
         {% endif %}
     </section>
 
 
      <script>
 
-        if({{ auction.active|yesno:"true,false" }} === true)
-        {
+      {% if errorFlag %}
+            window.onload = function () {
+                alert("{{ error }}")
+            }
+      {% endif %}
+
+      if({{ auction.active|yesno:"true,false" }} === true)
+      {
 
             const bidder = document.getElementById('highestBidder');
+            const bid = document.getElementById('current_bid');
             const countdown = document.getElementById('timer');
             let timeLeft = 0
 
@@ -55,8 +62,10 @@
                     {
                         let minutes = data.timeM;
                         let seconds = data.timeS;
+                        let currentBid=data.bid
+                        let highestBidder=data.highestBidder
 
-                        if (minutes <= 0 && seconds <= 0) {
+                        if (minutes <= 0 && seconds <= 0 || minutes < 0) {
                             // Stop the countdown when time is up
                             fetch("{% url 'auctions:checkAuction' itemId=auction.itemId %}",{method: 'GET'})
                                 .then(response => response.json())
@@ -83,18 +92,13 @@
                         }
                         else
                         {
-                            countdown.innerHTML = minutes + 'm' + seconds + 's';
-                            bidder.innerHTML = "{{ auction.highestBidder }}";
+                            countdown.innerHTML ="Time: "+ minutes + 'm' + seconds + 's';
+                            bidder.innerHTML = "Highest Bidder: " + highestBidder;
+                            bid.innerHTML = "Bid: " + currentBid;
                         }
                     })
             }, 1000);
-        }
-        else
-        {
-            const countdown = document.getElementById('timer');
-            countdown.innerHTML = "{{ auction.highestBidder }} has won the auction!"
-        }
-
+      }
 
      </script>
 

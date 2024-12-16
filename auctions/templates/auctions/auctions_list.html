@@ -1,27 +1,39 @@
 {% extends 'layout.html' %}
+{% load static %}
 
 {% block title %}
     Auctions
 {% endblock %}
 
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/auctionList.css' %}">
+{% endblock %}
+
 {% block content %}
     <section>
-        <h1>Auctions</h1>
+        <h1>All Auctions</h1>
 
+        <div class="auction-container">
         {% for auction in auctions %}
             <article class = "auction">
-                <h2>
-                    <a href="{% url 'auctions:page' itemId=auction.itemId %}">
-                        {{ auction.name }}
-                    </a>
-                </h2>
-                <p>by {{ auction.seller }} </p>
-                <p>Created at: {{ auction.created_at }}</p>
-                <p>Expires in: {{ auction.expires_at }}</p>
-                <p>Highest Bidder: {{ auction.highestBidder }}</p>
+                <a href="{% url 'auctions:page' itemId=auction.itemId %}">
+                <h2 class="name">
 
+                        {{ auction.name }}
+
+                </h2>
+                <img src="{{ auction.picture.url }}" alt="{{ auction.name }}">
+                <p>Auction by: {{ auction.seller }} </p>
+                <p>Highest Bidder: {{ auction.highestBidder }}</p>
+                {% if auction.active %}
+                    <p class="active-indicator"></p>
+                {% elif not auction.active %}
+                    <p class="not-active-indicator"></p>
+                {% endif %}
+                </a>
             </article>
         {% endfor %}
+        </div>
     </section>
 
 {% endblock %}

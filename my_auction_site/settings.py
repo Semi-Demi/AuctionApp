@@ -34,7 +34,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'auctions',
     'authentication',
-    'home',
     'userProfile',
     'channels',
 ]
@@ -78,7 +77,7 @@ CHANNEL_LAYERS = {
     }
 }
 
-#WSGI_APPLICATION = 'my_auction_site.wsgi.application'
+WSGI_APPLICATION = 'my_auction_site.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases

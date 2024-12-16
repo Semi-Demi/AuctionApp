@@ -1,52 +1,56 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 import json
-
-from channels.layers import channel_layers
-
+from .models import AuctionItem
 
 class AuctionConsumer(AsyncWebsocketConsumer):
 
-    #Called when websocket connection is initiated
+    # Called when websocket connection is initiated
+    # We set a group name to notify every connection within the bids group.
     async def connect(self):
-        await self.channel_layer.group_add('bids', self.channel_name)
-        print('connected')
-        print()
+        self.group_name = 'bids'
+
+        await self.channel_layer.group_add(self.group_name, self.channel_name)
+
+
         await self.accept()
 
-    #When a websocket connection is closed
+        print('connected')
+
+    # When a websocket connection is closed
+    # When it is closed we discard the group
     async def disconnect(self, code):
         print('disconnected')
-        await self.channel_layer.group_discard('bids', self.channel_name)
+        await self.channel_layer.group_discard(self.group_name, self.channel_name)
 
-    async def receive(self, text_data):
-        print('receive')
-        text_data_json = json.loads(text_data)
-        bidPrice = text_data_json['bidPrice']
-        timeLeft = text_data_json['timeLeft']
-        message = text_data_json['message']
-
-        await self.channel_layer.group_send(
-            "bids",
-            {
-                "type": "send.notif",
-                "bidPrice": bidPrice,
-                "timeLeft": timeLeft,
-                "message": message
-            }
-        )
-
+    # This is called when we want to notify every registered user about a new highest bidder on an auction item
+    # Here we prepare the data we want to display
     async def send_notif(self, event):
-        bidder = event['message']['bidder']
+        print("in sender")
         bid_price = event['message']['bid_price']
+        bidder_name = event['message']['bidder_name']
         auction_name = event['message']['auction_name']
-        auction_id = event['message']['auction_id']
-        remaining_time = event['message']['remaining_time']
+        auction_ID = event['message']['auction_ID']
 
-        # Send the data to WebSocket
+        message_sent = bidder_name + " has just bid $" + bid_price + " on auction " + auction_name + " with ID: " + auction_ID
+
+        print("Sending to websocket")
+
+            # Send the data to WebSocket so we can show the notification to users
         await self.send(text_data=json.dumps({
-            'bidder': bidder,
-            'bid_price': bid_price,
-            'auction_name': auction_name,
-            'auction_id': auction_id,
-            'remaining_time': remaining_time
+            'message_sent': message_sent
+        }))
+
+    async def send_winner(self, event):
+        print("in sender")
+        auction_name = event['message']['auction_name']
+        auction_ID = event['message']['auction_ID']
+        bidder_name = event['message']['bidder_name']
+        bid_price = event['message']['bid_price']
+
+        message_sent = bidder_name + " has won " + auction_name + " with ID: " + auction_ID + " with a bid of $" + bid_price
+        print("Sending to websocket")
+
+        # Send the data to WebSocket so we can show the notification to users
+        await self.send(text_data=json.dumps({
+            'message_sent': message_sent
         }))

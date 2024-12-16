@@ -1,9 +1,114 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+main{
+  margin: 10px;
+}
+
 h1{
     color: darkred;
 }
 
-.banner{
-    display: block;
+nav {
+  display: flex;
+  justify-content: space-between; /* Distributes space between elements */
+  align-items: center; /* Vertically centers items */
+  padding: 10px 20px;
+  background-color: rgba(79, 80, 94, 0.97); /* Adjust background color */
+  width: 100%;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  padding: 10px;
+}
+
+.logout {
+  margin-left: auto;
+  padding-right: 50px;/* Pushes the logout button to the far right */
+}
+
+.logout-button {
+  background-color: #f44336; /* Red background for logout button */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background-color: #d32f2f; /* Darker red on hover */
+}
+
+#nav-button:hover {
+  background-color: rgba(79, 80, 94, 0.97); /* Darker red on hover */
+}
+
+/* General form container */
+.login {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    margin: 0 auto;
+    max-width: 500px;
+    border-radius: 8px;
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+}
+
+
+input {
+    width: 95%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+button {
     width: 100%;
-    max-width: 800px;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+
+button {
+    background-color: #545462;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.register-form, .login-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+h1 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+#signin{
+  padding-right: 60px;
 }
